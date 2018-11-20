@@ -1,0 +1,19 @@
+/*set colors here*/
+/*toggle color scheme function in js*/
+#search{
+	padding-top: 45vh;
+	width: 30%;
+	margin: 0 1%;
+}
+#searchBar{
+	padding-top: 5%;
+	background-image:linear-gradient(0deg,#81b4f5 2px,rgba(0,40,136,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0) !important;
+}
+button:hover{
+	background-color: rgba(30,30,30,0.9) !important;
+	color: rgb(255,255,255) !important;
+}
+#login{
+	float: right;
+	margin: 1% 1%;
+}
