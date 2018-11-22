@@ -4,15 +4,56 @@
 <TITLE>
 Ask Lawrence
 </TITLE>
+<meta charset="UTF-8"> 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 <link rel="stylesheet" href="styles.css">
 </HEAD>
 <BODY>
-	<button class="btn btn-raised btn-outline-dark" id="login">Login</button>
+	<button type="button" class="btn btn-raised btn-outline-dark" id="login" data-toggle="modal" data-target="#exampleModalCenter">Login</button>
+	<!--Logo-->
+	<div>
+		<div id="logo" class="">
+			<span class="logoText">
+				Ask
+			</span>
+		</div>
+		<span class="logoText blackText">
+			Lawrence
+		</span>
+	</div>
 	<form class="justify-content-center d-flex ml-auto mr-auto" id="search">
 		<input type="text" class="form-control mr-auto ml-auto" placeholder="Search" id="searchBar">
 		<button type="submit" class="ml-auto mr- auto btn btn-raised btn-outline-dark" id="SearchBtn">Search</button>
 	</form>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+          <!-- <span aria-hidden="true">&times;</span> -->
+        <!-- </button> -->
+      </div>
+      <div class="modal-body">
+      	<form>
+      		<label for="user" class="d-inline-block">Username:</label>
+      		<input type="text" class="w-75 mt-auto mb-auto ml-auto mr-auto"  class="d-inline-flex" name="user" id="user" placeholder="Username"/>
+      		<label for="pass" class="d-inline-block">Password:</label>
+      		<input type="password" class="w-75 ml-auto mr-auto mt-4 mb-auto" class="d-inline-flex" name="pass" id="user" placeholder="Password"/>
+      	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+	<script src="./index.js"></script>
 </BODY>
 </HTML>

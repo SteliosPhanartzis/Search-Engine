@@ -1,7 +1,7 @@
 /*set colors here*/
 /*toggle color scheme function in js*/
 #search{
-	padding-top: 45vh;
+	padding-top: 20vh;
 	width: 30%;
 	margin: 0 1%;
 }
@@ -16,4 +16,30 @@ button:hover{
 #login{
 	float: right;
 	margin: 1% 1%;
+}
+#logo{
+	display: inline-flex;
+	background: radial-gradient(#b22 30%, #d44);
+	height: 3em;
+	width: 5em;
+	border-radius: 70%;
+	transform: rotate(-12deg);
+	text-align: center;
+	margin: 1em 0 1em 1em;
+	overflow: show;
+	white-space: nowrap;
+}
+.logoText{
+	margin: -1em auto;
+	display: inline-block;
+	padding-top: 1em;
+	transform: rotate(12deg);
+	font-size: 2em;
+	font-weight: bold;
+	color: white;
+}
+.blackText{
+	transform: rotate(0deg);
+	font-size: 1.75em;
+	color: black !important;
 }
