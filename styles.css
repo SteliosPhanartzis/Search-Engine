@@ -37,6 +37,7 @@ button:hover{
 	font-size: 2em;
 	font-weight: bold;
 	color: white;
+	font-family: "Yatra One", sans-serif;
 }
 .blackText{
 	transform: rotate(0deg);
