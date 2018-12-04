@@ -25,8 +25,8 @@ app.get('/search', function(request, response){
     // response.send('hello world');
 });
 
-app.listen(443);
+app.listen(process.env.PORT || 8080);
 
 
 
-console.log("Running at Port 3000");
+console.log("Running at Port 8080");
