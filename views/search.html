@@ -24,7 +24,7 @@ Ask Lawrence
 			Lawrence
 		</span>
 	</div>
-	<form class="justify-content-center d-flex ml-auto mr-auto" method = "get" action = "search" id="search">
+	<form class="justify-content-center d-flex ml-auto mr-auto" id="search">
 		<input type="text" class="form-control mr-auto ml-auto" placeholder="Search" id="searchBar">
 		<button type="submit" class="ml-auto mr- auto btn btn-raised btn-outline-dark" id="SearchBtn">Search</button>
 	</form>
@@ -39,7 +39,7 @@ Ask Lawrence
         <!-- </button> -->
       </div>
       <div class="modal-body">
-      	<form>
+      	<form action="search">
       		<label for="user" class="d-inline-block">Username:</label>
       		<input type="text" class="w-75 mt-auto mb-auto ml-auto mr-auto"  class="d-inline-flex" name="user" id="user" placeholder="Username"/>
       		<label for="pass" class="d-inline-block">Password:</label>
@@ -52,6 +52,30 @@ Ask Lawrence
       </div>
     </div>
   </div>
+</div>
+<div>
+<!--   <table>
+    <tr>
+      <td>Henlo</td>
+    </tr>
+    <tr>
+      <td>A good result of a search description is this and boi howdy does it do a thing</td>
+    </tr>
+    <tr>
+      <td>http://www.fakeurl.com/thiswillstealyourcreditcardinfo?givemeyourmoney</td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td>Oh Waow</td>
+    </tr>
+    <tr>
+      <td>I can't believe you found another result. Thas insane in the membrane. Henlo.</td>
+    </tr>
+    <tr>
+      <td>http://www.falseurl.com/thiswillstillstealyourcreditcardinfo?pleasegivemeyourmoney</td>
+    </tr>
+  </table> -->
+  <%- results %>
 </div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
