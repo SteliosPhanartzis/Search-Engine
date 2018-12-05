@@ -2,6 +2,7 @@ const express = require('express');
 const app = new express();
 var path = require("path");
 const bodyParser = require('body-parser');
+const PORT = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('views', path.join(__dirname, '../','views'));
@@ -19,8 +20,6 @@ app.get('/search', function(request, response){
     // Query db function would get handled here
 });
 
-app.listen(process.env.PORT || 3303);
-
-
-
-console.log("Running at Port 3303");
+app.listen(PORT,() => {
+	console.log("Running at Port " + PORT);
+});
