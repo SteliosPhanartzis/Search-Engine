@@ -13,14 +13,14 @@ app.get('/', function(request, response){
 });
 
 app.get('/search', function(request, response){
- console.log(request.query.searchid);
- var results = request.query.searchid;
-    response.render(path.join(__dirname, '../', 'views/search.html')),{results:results}
-    // response.send('hello world');
+ console.log(request.query.sid);
+ var results = request.query.sid;
+    response.render(path.join(__dirname, '../', 'views/search.html'),{results:results})
+    // Query db function would get handled here
 });
 
-app.listen(process.env.PORT || 3300);
+app.listen(process.env.PORT || 3303);
 
 
 
-console.log("Running at Port 3300");
+console.log("Running at Port 3303");

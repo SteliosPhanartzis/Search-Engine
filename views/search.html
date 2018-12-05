@@ -24,9 +24,9 @@ Ask Lawrence
 			Lawrence
 		</span>
 	</div>
-  <form class="justify-content-center d-flex ml-auto mr-auto" method = "get" action = "views/" id="search">
-    <input type="text" class="form-control mr-auto ml-auto" placeholder="Search" name="searchid" id="searchid">
-    <button type="submit" class="ml-auto mr- auto btn btn-raised btn-outline-dark" id="SearchBtn" value="searchid">Search</button>
+  <form class="justify-content-center d-flex ml-auto mr-auto" method = "get" action = "/search" id="search">
+    <input type="text" class="form-control mr-auto ml-auto" placeholder="Search" name="sid" id="sid">
+    <button type="submit" class="ml-auto mr- auto btn btn-raised btn-outline-dark" id="SearchBtn" value="sid">Search</button>
   </form>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -54,27 +54,6 @@ Ask Lawrence
   </div>
 </div>
 <div>
-<!--   <table>
-    <tr>
-      <td>Henlo</td>
-    </tr>
-    <tr>
-      <td>A good result of a search description is this and boi howdy does it do a thing</td>
-    </tr>
-    <tr>
-      <td>http://www.fakeurl.com/thiswillstealyourcreditcardinfo?givemeyourmoney</td>
-    </tr>
-    <tr></tr>
-    <tr>
-      <td>Oh Waow</td>
-    </tr>
-    <tr>
-      <td>I can't believe you found another result. Thas insane in the membrane. Henlo.</td>
-    </tr>
-    <tr>
-      <td>http://www.falseurl.com/thiswillstillstealyourcreditcardinfo?pleasegivemeyourmoney</td>
-    </tr>
-  </table> -->
   <%= (typeof results != "undefined" ? results: "") %>
 </div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
