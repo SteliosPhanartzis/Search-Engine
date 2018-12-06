@@ -5,7 +5,7 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bapp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node routes/app.js"
+    "start": "node routes/app.js",
     "postinstall": "ng build"
   },
   "repository": {
