@@ -3,7 +3,7 @@ const app = new express();
 const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const PORT = process.env.PORT || 5042;
+const PORT = process.env.PORT || 5043;
 const sqlconn = mysql.createConnection({
   host     : 'h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
   user     : 'ssam7xjm54kms0e0',
@@ -11,6 +11,7 @@ const sqlconn = mysql.createConnection({
   database : 'hei5xkowlg9oo6t4'
 });
 
+sqlconn.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //sqlconn.connect()
@@ -43,13 +44,22 @@ app.get('/', function(request, response){
 });
 
 app.get('/search', function(request, response){
- 	console.log(request.query.sid);
+ 	//Get client request
+ 	//console.log(request.query.sid);
  	var results = request.query.sid;
-	sqlconn.connect();
-	sqlconn.query(results, function (err, rows, fields) {
-		if (err) console.log(err);
-		//console.log('The solution is: ', rows[0].solution)
+ 	//construct and pass query to mysql
+ 	var qry = "SELECT urlNames FROM URL WHERE urlNames LIKE CONCAT('%','" + results + "'',%')";
+	var out = sqlconn.query(qry, function (err, result, fields) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+		var rows = JSON.parse(JSON.stringify(result[0]));
+		console.log("Result: " + rows);
 	});
-	sqlconn.end();
  	response.render(path.join(__dirname, '../', 'views/search.html'),{results:results})
+	//Connection Timeout
+	setTimeout(() => {
+		sqlconn.end();
+		}, 10000);
 });
