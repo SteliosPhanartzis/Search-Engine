@@ -5,8 +5,7 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bapp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node routes/app.js",
-    "postinstall": "ng build"
+    "start": "node routes/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +23,7 @@
     "fs": "0.0.1-security",
     "jquery": "^3.3.1",
     "nodemon": "^1.18.7",
-    "popper.js": "^1.14.6"
+    "popper.js": "^1.14.6",
+    "socket.io": "2.2.0"
   }
 }
