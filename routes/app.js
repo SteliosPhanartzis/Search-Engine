@@ -4,7 +4,7 @@ const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 //const mysql = require('mysql');
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5092;
 
 app.use(express.static('public'));
 app.set('views', path.join(__dirname, '../','views'));
@@ -35,10 +35,10 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'));
 }
 
-app.all('*', function(req, res) {
+app.all('/*', function(req, res, next) {
 res.header('Access-Control-Allow-Origin', '*');
 res.header('Access-Control-Allow-Headers', 'Content-Type,accept,access_token,X-Requested-With');
-res.sendFile(path.join(__dirname, '../', '/views/index.html'));
+next();
 });
 
 
