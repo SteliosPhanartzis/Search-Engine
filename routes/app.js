@@ -24,10 +24,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //sqlconn.end()
 
-app.all('/*', function(req, res, next) {
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('client/build'));
+}
+
+app.all('*', function(req, res) {
 res.header('Access-Control-Allow-Origin', '*');
 res.header('Access-Control-Allow-Headers', 'Content-Type,accept,access_token,X-Requested-With');
-next();
+res.sendFile(path.join(__dirname, '../', '/views/index.html'));
 });
 
 app.use(express.static('public'));
