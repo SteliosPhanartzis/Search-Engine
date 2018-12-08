@@ -35,9 +35,6 @@ app.set('views', path.join(__dirname, '../','views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.listen(PORT,() => {
-	console.log("Running at Port " + PORT);
-});
 
 app.get('/', function(request, response){
     response.sendFile(path.join(__dirname, '../', '/views/index.html'));
@@ -62,4 +59,8 @@ app.get('/search', function(request, response){
 	setTimeout(() => {
 		sqlconn.end();
 		}, 10000);
+});
+
+app.listen(PORT,() => {
+	console.log("Running at Port " + PORT);
 });
