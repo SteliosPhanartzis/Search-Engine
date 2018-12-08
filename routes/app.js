@@ -3,7 +3,13 @@ const app = new express();
 const path = require("path");
 const bodyParser = require('body-parser');
 //const mysql = require('mysql');
-const PORT = process.env.PORT || 5043;
+const PORT = process.env.PORT || 8080;
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.set('views', path.join(__dirname, '../','views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 // const sqlconn = mysql.createConnection({
 //   host     : 'h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
 //   user     : 'ssam7xjm54kms0e0',
@@ -12,7 +18,6 @@ const PORT = process.env.PORT || 5043;
 // });
 
 //sqlconn.connect();
-app.use(bodyParser.urlencoded({ extended: true }));
 
 //sqlconn.connect()
 
@@ -34,10 +39,6 @@ res.header('Access-Control-Allow-Headers', 'Content-Type,accept,access_token,X-R
 res.sendFile(path.join(__dirname, '../', '/views/index.html'));
 });
 
-app.use(express.static('public'));
-app.set('views', path.join(__dirname, '../','views'));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
 
 
 app.get('/', function(request, response){
