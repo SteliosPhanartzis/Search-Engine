@@ -1,13 +1,15 @@
 const express = require('express');
 const app = new express();
+const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 //const mysql = require('mysql');
 const PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('views', path.join(__dirname, '../','views'));
+app.use(favicon(path.join(__dirname, '../public/','favicon.ico')))
+app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 // const sqlconn = mysql.createConnection({

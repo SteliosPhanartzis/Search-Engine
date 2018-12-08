@@ -19,11 +19,14 @@
   "homepage": "https://github.com/SteliosPhanartzis/Search-Engine#readme",
   "dependencies": {
     "bootstrap-material-design": "^4.1.1",
+    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "jquery": "^3.3.1",
+    "mysql": "^2.16.0",
     "nodemon": "^1.18.7",
     "popper.js": "^1.14.6",
+    "serve-favicon": "^2.5.0",
     "socket.io": "2.2.0"
   }
 }
