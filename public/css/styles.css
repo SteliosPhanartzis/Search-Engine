@@ -1,1 +1,51 @@
-#search{padding-top:20vh;width:30%;margin:0 1%}#searchBar{padding-top:5%;background-image:linear-gradient(0deg,#81b4f5 2px,rgba(0,40,136,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0)!important}button:hover{background-color:rgba(30,30,30,.9)!important;color:#fff!important}#login{float:right;margin:1%}#logo{display:inline-flex;background:radial-gradient(#b22 30%,#d44);height:3em;width:5em;border-radius:70%;transform:rotate(-12deg);text-align:center;margin:1em 0 1em 1em;overflow:show;white-space:nowrap}.logoText{margin:-1em auto;display:inline-block;padding-top:1em;transform:rotate(12deg);font-size:2em;font-weight:700;color:#fff;font-family:"Yatra One",sans-serif}.blackText{transform:rotate(0);font-size:1.75em;color:#000!important}
+#search{
+	padding-top:20vh;
+	width:30%;
+	margin:0 1%;
+}
+#searchBar
+{
+	padding-top:5%;
+	background-image:linear-gradient(0deg,#81b4f5 2px,rgba(0,40,136,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0)!important;
+}
+button:hover{
+	background-color:rgba(30,30,30,.9)!important;
+	color:#fff!important;
+}
+#login
+{
+	float:right;
+	margin:1%;
+}
+#logo{
+	display:inline-flex;
+	background:radial-gradient(#b22 30%,#d44);
+	height:3em;
+	width:5em;
+	border-radius:70%;
+	transform:rotate(-12deg);
+	text-align:center;
+	margin:1em 0 1em 1em;
+	overflow:show;
+	white-space:nowrap;
+}
+.logoText{
+	margin:-1em auto;
+	display:inline-block;
+	padding-top:1em;
+	transform:rotate(12deg);
+	font-size:2em;
+	font-weight:700;
+	color:#fff;
+	font-family:"Yatra One",sans-serif;
+}
+.blackText{
+	transform:rotate(0);
+	font-size:1.75em;
+	color:#000!important;
+}
+.searchResult{
+	margin-left: 10em;
+	margin-top: 2em;
+	font-size: 24px;
+}
