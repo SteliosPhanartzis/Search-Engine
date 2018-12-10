@@ -87,17 +87,16 @@ app.get('/', function(request, response){
 });
  //Path call when user has submitted a search
 app.get('/search', function(request, response){
-	var sql_res;
+	var sql_res = '';
  	sql_input = request.query.sid;
 	getURL(sql_input, function (err, urlList){ 
 			// Maybe add error handler 
-			// Selects just first result for now     
-			sql_res = urlList[0].URL_NAMES;
-			// Confirms urList is an array
-			console.log("List is " + urlList.length);
+			// Check to make sure urlList is not null, then iterate
+			if(urlList.length > 0 || (urlList.length != null))
+				for(let i = 0; i < urlList.length; i++)  
+					sql_res += '<div>' + urlList[i].URL_NAMES + '</div>';
 			// Write function to loop through urlList to get urlList[i].URL_NAMES
-	    	response.render(path.join(__dirname, '../', 'views/search.html'),{results:sql_res});
-		    console.log("Results are " + sql_res);     
+	    	response.render(path.join(__dirname, '../', 'views/search.html'),{results:sql_res});   
 	},1000);
 });
  app.listen(PORT,() => {
