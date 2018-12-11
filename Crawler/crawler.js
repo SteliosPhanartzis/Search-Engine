@@ -68,9 +68,12 @@ function visitPage(url, callback) {
       con.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
-          count.forEach(function(){
-              var sql = "INSERT INTO URL (terms, urls) VALUES ("+this+", "+url+")";
-          })
+          count.forEach(makeQuery);
+
+          function makeQuery(value){
+              debugger;
+              var sql = "INSERT INTO URL (terms, urls) VALUES ('"+value+"', '"+url+"')";
+          }
         //var sql = "INSERT INTO URL (terms, urls) VALUES ("+, '65-30 Kissena Blvd.')";
       });
       //console.log(typeof(count));
