@@ -6,8 +6,8 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const PORT = process.env.PORT || 5090;
-var sql_input;
-var connection;
+let sql_input;
+let connection;
 
 // Set up paths and stuff for express
 app.use(express.static('public'));
@@ -61,11 +61,11 @@ handleDisconnect();
 // Function to query DB with user input and return results as callback
 function getURL(input, callback) {
     // DB query
-    var qry = 'SELECT URL_NAMES FROM URL WHERE URL_NAMES LIKE \'%' + input + '%\'';
+    let qry = 'SELECT URL_NAMES FROM URL WHERE URL_NAMES LIKE \'%' + input + '%\'';
     // Debug - check if input is passed
     console.log("input is " + input);
     // Callback to return result
-    var out = connection.query(qry, function (err, rows, fields) {
+    let out = connection.query(qry, function (err, rows, fields) {
         // Error handler
         if (err) {
             console.log(err);
@@ -89,7 +89,7 @@ app.get('/', function (request, response) {
 });
 //Path call when user has submitted a search
 app.get('/search', function (request, response) {
-    var sql_res = '';
+    let sql_res = '';
     sql_input = request.query.sid;
     getURL(sql_input, function (err, urlList) {
         // Maybe add error handler

@@ -1,24 +1,24 @@
-var request = require('request');
-var cheerio = require('cheerio');
-var URL = require('url-parse');
-var mysql = require('mysql');
+const request = require('request');
+const cheerio = require('cheerio');
+const URL = require('url-parse');
+const mysql = require('mysql');
 
-var START_URL = "https://mashable.com/";
-var SEARCH_WORD = "trump";
-var MAX_PAGES_TO_VISIT = 1;
+let START_URL = "https://mashable.com/";
+let SEARCH_WORD = "trump";
+let MAX_PAGES_TO_VISIT = 1;
 
-var pagesVisited = {};
-var numPagesVisited = 0;
-var pagesToVisit = [];
-var url = new URL(START_URL);
-var baseUrl;
+let pagesVisited = {};
+let numPagesVisited = 0;
+let pagesToVisit = [];
+let url = new URL(START_URL);
+let baseUrl;
 
-var con = mysql.createConnection({
+let con = mysql.createConnection({
     host: "h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     user: "ssam7xjm54kms0e0",
     password: "tr9diqtobus8nu5y",
     database: 'hei5xkowlg9oo6t4',
-    debug: 'false'
+    debug: 'true'
 });
 
 
@@ -30,13 +30,12 @@ function crawl() {
         console.log("Reached max limit of number of pages to visit.");
         return;
     }
-    var nextPage = pagesToVisit.pop();
-    debugger;
+    let nextPage = pagesToVisit.pop();
 //    console.log(nextPage);
     if (nextPage in pagesVisited) {
         // We've already visited this page, so repeat the crawl
         crawl();
-    } else if (typeof(nextPage) == "undefined") {
+    } else if (typeof(nextPage) === "undefined") {
         console.log("That's it baby.");
     } else {
         // New page we haven't visited
@@ -44,6 +43,30 @@ function crawl() {
         baseUrl = url.protocol + "//" + url.hostname;
         visitPage(nextPage, crawl);
     }
+}
+
+function insertIntoDB (count, url) {
+    debugger;
+    console.log("SELECTING");
+    con.connect(function (err) {
+        if (err) throw err;
+        console.log("Connected!");
+
+        for (let property in count) {
+            console.log("property", property);
+            console.log("url", url);
+            if (!count.hasOwnProperty(property)) continue;
+            let sqlTerms = "INSERT INTO TERMS (TERMS) VALUES (' " + property + " ')";
+            let sqlUrls = "INSERT INTO URL (URL_NAMES) VALUES (' " + url + "' )";
+            let sqlTermID = "SELECT TERM_ID FROM TERMS WHERE TERMS LIKE '%property%' ";
+
+            con.query("SELECT TERMS_ID FROM TERMS WHERE TERMS LIKE '%" + property + "%' ", function (err, result, fields) {
+                if (err) throw err;
+                console.log("result", result[0]["TERMS_ID"]);
+            });
+        }
+    });
+
 }
 
 function visitPage(url, callback) {
@@ -54,66 +77,84 @@ function visitPage(url, callback) {
     console.log("Visiting page " + url);
     request(url, function (error, response, body) {
         // Check status code (200 is HTTP OK)
-        debugger;
         //console.log("Status code: " + response.statusCode);
-        if (typeof(response) == "undefined" || response.statusCode !== 200) {
+        if (typeof(response) === "undefined" || response.statusCode !== 200) {
             callback();
             return;
         }
         // Parse the document body
-        var $ = cheerio.load(body);
-        var count = searchForWord($, SEARCH_WORD);
+        let $ = cheerio.load(body);
+        let count = searchForWord($, SEARCH_WORD);
         console.log(count);
-        con.connect(function (err) {
-            if (err) throw err;
-            console.log("Connected!");
-            count.forEach(makeQuery);
+        collectInternalLinks($);
+        insertIntoDB(count, url);
+    });
 
-            function makeQuery(value) {
-                debugger;
-                var sql = "INSERT INTO URL (terms, urls) VALUES ('" + value + "', '" + url + "')";
-            }
+    // con.query(sqlTerms, function(err, result) {
+    //     if (err) throw err;
+    //     console.log('One record inserted', result); //if the sql statement works, let us know by console logging
+    // })
+    // con.query(sqlUrls, function(err, result) {
+    //     if (err) throw err;
+    //     console.log('One record inserted', result); //if the sql statement works, let us know by console logging
+    // })
 
-            //var sql = "INSERT INTO URL (terms, urls) VALUES ("+, '65-30 Kissena Blvd.')";
-        });
+
+
+
+                // con.query(select, function(err, result){
+                //     if (err) throw err;
+                //     console.log(result); //if the sql statement works, let us know by console logging
+                // })
+            // }
+
+            //let sql = "INSERT INTO URL (terms, urls) VALUES ("+, '65-30 Kissena Blvd.')";
+
         //console.log(typeof(count));
 
-        collectInternalLinks($);
+
 //     if(isWordFound) {
 //       console.log('Word ' + SEARCH_WORD + ' found at page ' + url);
 //     }
         //collectInternalLinks($);
         // In this short program, our callback is just calling crawl()
         callback();
-    });
+
 }
 
 function searchForWord($, word) {
-    var h1 = "";
-    var h2 = "";
-    var h3 = "";
-    var p = "";
-    var bodyText = $("h1").each(function () {
+    let h1 = "";
+    let h2 = "";
+    let h3 = "";
+    let p = "";
+    $("h1").each(function () {
         h1 += $(this).text() + " ";
-    })
-    bodyText = $("h2").each(function () {
+    });
+    $("h2").each(function () {
         h2 += $(this).text() + " ";
-    })
-    bodyText = $("h3").each(function () {
+    });
+    $("h3").each(function () {
         h3 += $(this).text() + " ";
-    })
-    bodyText = $("p").each(function () {
+    });
+    $("p").each(function () {
         p += $(this).text() + " ";
-    })
+    });
     console.log(p);
-    var meat = h1 + h2 + h3 + p;
+    let meat = h1 + h2 + h3 + p;
     //console.log(countWords(meat));
     return (countWords(meat));
 
 }
 
 function countWords(sentence) {
-    var index = [],
+    // var index = [{
+    //     token: "",
+    //     frequency: 0,
+    //     tokenID: 0,
+    //     urlID: 0
+    // }];
+
+    let index = {},
         words = sentence
             .replace(/[.,?!;()"'-]/g, " ")
             .replace(/\s+/g, " ")
@@ -122,22 +163,23 @@ function countWords(sentence) {
 
     words.forEach(function (word) {
         if (!(index.hasOwnProperty(word))) {
-            index.push(word);
+            index[word] = {};
+            index[word]["frequency"] = 0;
         }
-        //index[word]++;
+        index[word]["frequency"]++;
     });
 
     return index;
 }
 
 function collectInternalLinks($) {
-    var relativeLinks = $("a[href^='/']");
+    let relativeLinks = $("a[href^='/']");
     console.log("Found " + relativeLinks.length + " relative links on page");
     relativeLinks.each(function () {
         console.log(baseUrl + $(this).attr('href'));
         pagesToVisit.push(baseUrl + $(this).attr('href'));
     });
-    var absoluteLinks = $("a[href^='http']");
+    let absoluteLinks = $("a[href^='http']");
     console.log("Found " + absoluteLinks.length + " absolute links on page");
     absoluteLinks.each(function () {
         if (!($(this).attr('href') in pagesVisited)) {
