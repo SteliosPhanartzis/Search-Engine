@@ -60,8 +60,20 @@ handleDisconnect();
 
 // Function to query DB with user input and return results as callback
 function getURL(input, callback) {
+    var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
+    var arrIn = input.split(searchRegEx);
+    var qry = "select URL_NAMES from URL where URL_ID in" +
+              "(select URL_ID from TERMS_URL where terms_ID in" +
+              "(select terms_ID from TERMS where ";
+    console.log(arrIn);
     // DB query
-    let qry = 'SELECT URL_NAMES FROM URL WHERE URL_NAMES LIKE \'%' + input + '%\'';
+    for(let i = 0; i < arrIn.length; i++){
+        qry += "TERM like '%" + arrIn[i] +"%'"
+        if(i<(arrIn.length-1))
+            qry+=' OR ';
+        if(i>=(arrIn.length-1))
+            qry+=')) ';
+    }
     // Debug - check if input is passed
     console.log("input is " + input);
     // Callback to return result
