@@ -56,14 +56,38 @@ function insertIntoDB (count, url) {
             console.log("property", property);
             console.log("url", url);
             if (!count.hasOwnProperty(property)) continue;
-            let sqlTerms = "INSERT INTO TERMS (TERMS) VALUES (' " + property + " ')";
-            let sqlUrls = "INSERT INTO URL (URL_NAMES) VALUES (' " + url + "' )";
-            let sqlTermID = "SELECT TERM_ID FROM TERMS WHERE TERMS LIKE '%property%' ";
+            let insertTerms = "INSERT INTO TERMS (TERMS) VALUES (' " + property + " ')";
+            let insertUrls = "INSERT INTO URL (URL_NAMES) VALUES (' " + url + "' )";
+            let selectTermID = "SELECT TERMS_ID FROM TERMS WHERE TERMS LIKE '%property%' ";
+            let selectUrlsID = "SELECT URL_ID FROM URL WHERE URL_NAMES LIKE '%url%' ";
+            debugger;
 
-            con.query("SELECT TERMS_ID FROM TERMS WHERE TERMS LIKE '%" + property + "%' ", function (err, result, fields) {
+            con.query(insertTerms, function (err, result, fields) {
+                if (err) throw err;
+                console.log("Inserted term", property);
+            });
+            con.query(insertUrls, function (err, result, fields) {
+                if (err) throw err;
+                console.log("inserted url", url);
+            });
+            con.query(selectTermID, function (err, result, fields) {
                 if (err) throw err;
                 console.log("result", result[0]["TERMS_ID"]);
+                count[property]["Term_ID"] = result[0]["TERMS_ID"];
+
             });
+            con.query(selectUrlsID, function (err, result, fields) {
+                if (err) throw err;
+                console.log("result", result[0]["URL_ID"]);
+                count[property]["URL_ID"] = result[0]["URL_ID"];
+
+            });
+            let insertTermsURL = "INSERT INTO TERMS_URL (URL_ID, terms_ID, frequency) VALUES ("+count[property]["URL_ID"]+","+count[property]["TERM_ID"]+","+count[property]["frequency"]+")";
+            con.query(insertTermsURL, function (err, result, fields) {
+                if (err) throw err;
+                console("Inserted row", count[property]["URL_ID"]+","+count[property]["TERM_ID"]+","+count[property]["frequency"]);
+            });
+            debugger;
         }
     });
 
