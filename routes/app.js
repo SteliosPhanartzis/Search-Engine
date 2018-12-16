@@ -109,7 +109,7 @@ app.get('/search', function (request, response) {
         // Check to make sure urlList is not null, then iterate
         if (urlList.length > 0 || (urlList.length != null))
             for (var i = 0; i < urlList.length; i++)
-                sql_res += '<div>' + urlList[i].URL_NAMES + '</div>';
+                sql_res += '<div>' + urlList[i].URL + '</div>';
         // Write function to loop through urlList to get urlList[i].URL_NAMES
         response.render(path.join(__dirname, '../', 'views/search.html'), {results: sql_res});
     }, 1000);
