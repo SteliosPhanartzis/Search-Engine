@@ -45,47 +45,52 @@ function crawl() {
     }
 }
 
-function insertIntoDB (count, url) {
+function insertIntoDB(count, url) {
     debugger;
     console.log("SELECTING");
     con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
 
-        for (let property in count) {
-            console.log("property", property);
-            console.log("url", url);
-            if (!count.hasOwnProperty(property)) continue;
-            let insertTerms = "INSERT INTO TERMS (TERMS) VALUES (' " + property + " ')";
-            let insertUrls = "INSERT INTO URL (URL_NAMES) VALUES (' " + url + "' )";
-            let selectTermID = "SELECT TERMS_ID FROM TERMS WHERE TERMS LIKE '%property%' ";
-            let selectUrlsID = "SELECT URL_ID FROM URL WHERE URL_NAMES LIKE '%url%' ";
+        let insertURL = "INSERT INTO URLS (URL) VALUES (' " + url + "' )";
+        let selectURL_ID = "SELECT URL_ID FROM URLS WHERE URL LIKE '%" + url+ "%' ";
+
+        con.query(insertURL, function (err, result, fields) {
+            if (err) throw err;
+            console.log("inserted url", url, '\nresult was: ', result);
+        });
+
+        con.query(selectURL_ID, function (err, result, fields) {
+            if (err) throw err;
+            console.log("entire URL result", result);
+            console.log("result[0][\"URL_ID\"]", result[0]["URL_ID"]);
+            count['url_id'] = result[0]["URL_ID"];
+        });
+        for (let term in count) {
+            if (!count.hasOwnProperty(term)) continue;
+            let insertTerm = "INSERT INTO TERMS (TERM) VALUES (' " + term + " ')";
+            let selectTerm_ID = "SELECT TERM_ID FROM TERMS WHERE TERM LIKE '%" + term + "%' ";
             debugger;
 
-            con.query(insertTerms, function (err, result, fields) {
+            con.query(insertTerm, function (err, result, fields) {
                 if (err) throw err;
-                console.log("Inserted term", property);
+                console.log("Inserted term", term);
+                console.log("insert term result", result);
             });
-            con.query(insertUrls, function (err, result, fields) {
+            con.query(selectTerm_ID, function (err, result, fields) {
                 if (err) throw err;
-                console.log("inserted url", url);
-            });
-            con.query(selectTermID, function (err, result, fields) {
-                if (err) throw err;
-                console.log("result", result[0]["TERMS_ID"]);
-                count[property]["Term_ID"] = result[0]["TERMS_ID"];
+                console.log("entire term result", result);
+                console.log("result[0][\"TERM_ID\"]", result[0]["TERM_ID"]);
+                count[term]["term_id"] = result[0]["TERM_ID"];
 
             });
-            con.query(selectUrlsID, function (err, result, fields) {
-                if (err) throw err;
-                console.log("result", result[0]["URL_ID"]);
-                count[property]["URL_ID"] = result[0]["URL_ID"];
-
-            });
-            let insertTermsURL = "INSERT INTO TERMS_URL (URL_ID, terms_ID, frequency) VALUES ("+count[property]["URL_ID"]+","+count[property]["TERM_ID"]+","+count[property]["frequency"]+")";
+            console.log(count[term]);
+            console.log(count[url_id]);
+            let insertTermsURL = "INSERT INTO TERM_URL (URL_ID, term_ID, frequency) VALUES (" + count.url_id + "," + count[term]["TERM_ID"] + "," + count[term]["frequency"] + ")";
             con.query(insertTermsURL, function (err, result, fields) {
                 if (err) throw err;
-                console("Inserted row", count[property]["URL_ID"]+","+count[property]["TERM_ID"]+","+count[property]["frequency"]);
+                console.log("insert term url result", result);
+                console.log("Inserted row", count.url_id + "," + count[term]["TERM_ID"] + "," + count[term]["frequency"]);
             });
             debugger;
         }
@@ -109,7 +114,6 @@ function visitPage(url, callback) {
         // Parse the document body
         let $ = cheerio.load(body);
         let count = searchForWord($, SEARCH_WORD);
-        console.log(count);
         collectInternalLinks($);
         insertIntoDB(count, url);
     });
@@ -124,25 +128,23 @@ function visitPage(url, callback) {
     // })
 
 
+    // con.query(select, function(err, result){
+    //     if (err) throw err;
+    //     console.log(result); //if the sql statement works, let us know by console logging
+    // })
+    // }
 
+    //let sql = "INSERT INTO URL (terms, urls) VALUES ("+, '65-30 Kissena Blvd.')";
 
-                // con.query(select, function(err, result){
-                //     if (err) throw err;
-                //     console.log(result); //if the sql statement works, let us know by console logging
-                // })
-            // }
-
-            //let sql = "INSERT INTO URL (terms, urls) VALUES ("+, '65-30 Kissena Blvd.')";
-
-        //console.log(typeof(count));
+    //console.log(typeof(count));
 
 
 //     if(isWordFound) {
 //       console.log('Word ' + SEARCH_WORD + ' found at page ' + url);
 //     }
-        //collectInternalLinks($);
-        // In this short program, our callback is just calling crawl()
-        callback();
+    //collectInternalLinks($);
+    // In this short program, our callback is just calling crawl()
+    callback();
 
 }
 
@@ -163,7 +165,6 @@ function searchForWord($, word) {
     $("p").each(function () {
         p += $(this).text() + " ";
     });
-    console.log(p);
     let meat = h1 + h2 + h3 + p;
     //console.log(countWords(meat));
     return (countWords(meat));
@@ -171,14 +172,23 @@ function searchForWord($, word) {
 }
 
 function countWords(sentence) {
-    // var index = [{
-    //     token: "",
+    // count = [
+    // {
+    //     word: "",
     //     frequency: 0,
     //     tokenID: 0,
     //     urlID: 0
     // }];
 
-    let index = {},
+    // count = {
+        // "term" : {
+        //      frequency: #,
+        //      url_id: #,
+        //      term_id: #
+    // term["frequency"] == term.frequency
+
+
+    let count = {},
         words = sentence
             .replace(/[.,?!;()"'-]/g, " ")
             .replace(/\s+/g, " ")
@@ -186,14 +196,16 @@ function countWords(sentence) {
             .split(" ");
 
     words.forEach(function (word) {
-        if (!(index.hasOwnProperty(word))) {
-            index[word] = {};
-            index[word]["frequency"] = 0;
+        if (!(count.hasOwnProperty(word))) {
+            count[word] = {};
+            count[word]["frequency"] = 0;
+            count[word]["term_id"] = "";
+            count[word]["url_id"] = "";
         }
-        index[word]["frequency"]++;
+        count[word]["frequency"]++;
     });
 
-    return index;
+    return count;
 }
 
 function collectInternalLinks($) {
