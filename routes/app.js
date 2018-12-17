@@ -6,8 +6,8 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const PORT = process.env.PORT || 5090;
-let sql_input;
-let connection;
+var sql_input;
+var connection;
 
 // Set up paths and stuff for express
 app.use(express.static('public'));
@@ -55,29 +55,15 @@ function handleDisconnect() {
         }
     });
 }
-
-handleDisconnect();
-
-// Function to query DB with user input and return results as callback
-function getURL(input, callback) {
+//Function to handle safe searches
+function safeSearch(input, callback) {
+    connection = mysql.createConnection(sqlconn);
+    connection.connect();
     var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
     var arrIn = input.split(searchRegEx);
-    var qry = "select URL_NAMES from URL where URL_ID in" +
-              "(select URL_ID from TERMS_URL where terms_ID in" +
-              "(select terms_ID from TERMS where ";
-    console.log(arrIn);
-    // DB query
-    for(let i = 0; i < arrIn.length; i++){
-        qry += "TERM like '%" + arrIn[i] +"%'"
-        if(i<(arrIn.length-1))
-            qry+=' OR ';
-        if(i>=(arrIn.length-1))
-            qry+=')) ';
-    }
-    // Debug - check if input is passed
-    console.log("input is " + input);
-    // Callback to return result
-    let out = connection.query(qry, function (err, rows, fields) {
+    var safeqry = "select * FROM PRITSUS WHERE PROFANITY = '" + input + "'";
+        // Callback to return result
+    var out = connection.query(safeqry, function (err, rows, fields) {
         // Error handler
         if (err) {
             console.log(err);
@@ -86,6 +72,39 @@ function getURL(input, callback) {
         // Returns result
         callback(err, rows);
     });
+    connection.end();
+}
+// Function to query DB with user input and return results as callback
+function getURL(input, callback) {
+    connection = mysql.createConnection(sqlconn);
+    connection.connect();
+    var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
+    var arrIn = input.split(searchRegEx);
+    var qry = "select URL from URLS where URL_ID in" +
+              "(select URL_ID from TERM_URL where term_ID in" +
+              "(select term_ID from TERMS where ";
+    console.log(arrIn);
+    // DB query
+    for(var i = 0; i < arrIn.length; i++){
+        qry += "term like '%" + arrIn[i] +"%'";
+        if(i<(arrIn.length-1))
+            qry+=' OR ';
+        if(i>=(arrIn.length-1))
+            qry+=')) ';
+    }
+    // Debug - check if input is passed
+    console.log("input is " + input);
+    // Callback to return result
+    var out = connection.query(qry, function (err, rows, fields) {
+        // Error handler
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        // Returns result
+        callback(err, rows);
+    });
+    connection.end();
 }
 
 //Handles any path call
@@ -101,17 +120,27 @@ app.get('/', function (request, response) {
 });
 //Path call when user has submitted a search
 app.get('/search', function (request, response) {
-    let sql_res = '';
+    var sql_res = '';
     sql_input = request.query.sid;
-    getURL(sql_input, function (err, urlList) {
+    //SafeSearch
+    safeSearch(sql_input, function (err, termList) {
+        // Maybe add error handler
+        // Check to make sure urlList is not null, then iterate
+        if (termList.length > 0)
+            response.render(path.join(__dirname, '../', 'views/search.html'), {results: "Assur!"});
+        else{
+    //Get Search
+        getURL(sql_input, function (err, urlList) {
         // Maybe add error handler
         // Check to make sure urlList is not null, then iterate
         if (urlList.length > 0 || (urlList.length != null))
-            for (let i = 0; i < urlList.length; i++)
-                sql_res += '<div>' + urlList[i].URL_NAMES + '</div>';
+            for (var i = 0; i < urlList.length; i++)
+                sql_res += '<div><a href = "' + urlList[i].URL + '">' + urlList[i].URL + '</a></div>';
         // Write function to loop through urlList to get urlList[i].URL_NAMES
         response.render(path.join(__dirname, '../', 'views/search.html'), {results: sql_res});
-    }, 1000);
+        }, 1000);
+        }
+    });
 });
 app.listen(PORT, () => {
     console.log("Running at Port " + PORT);
