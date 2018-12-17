@@ -3,9 +3,9 @@ const cheerio = require('cheerio');
 const URL = require('url-parse');
 const mysql = require('mysql');
 
-let START_URL = "https://mashable.com/";
+let START_URL = "https://en.wikipedia.org/wiki/Judaism";
 let SEARCH_WORD = "trump";
-let MAX_PAGES_TO_VISIT = 1;
+let MAX_PAGES_TO_VISIT = 3;
 
 let pagesVisited = {};
 let numPagesVisited = 0;
@@ -26,8 +26,10 @@ pagesToVisit.push(START_URL);
 crawl();
 
 function crawl() {
+    debugger;
     if (numPagesVisited >= MAX_PAGES_TO_VISIT) {
         console.log("Reached max limit of number of pages to visit.");
+        con.end();
         return;
     }
     let nextPage = pagesToVisit.pop();
@@ -37,6 +39,7 @@ function crawl() {
         crawl();
     } else if (typeof(nextPage) === "undefined") {
         console.log("That's it baby.");
+        return;
     } else {
         // New page we haven't visited
         url = new URL(nextPage);
@@ -46,56 +49,64 @@ function crawl() {
 }
 
 function insertIntoDB(count, url) {
-    debugger;
-    console.log("SELECTING");
+    //console.log("SELECTING");
     con.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-
+        let url_id;
         let insertURL = "INSERT INTO URLS (URL) VALUES (' " + url + "' )";
         let selectURL_ID = "SELECT URL_ID FROM URLS WHERE URL LIKE '%" + url+ "%' ";
-
-        con.query(insertURL, function (err, result, fields) {
+        con.query(insertURL, function (err, insertURLresult, fields) {
             if (err) throw err;
-            console.log("inserted url", url, '\nresult was: ', result);
-        });
+            //console.log("inserted url", url, '\nresult was: ', result);
+            //console.log('result from inserting URL: ',insertURLresult );
 
-        con.query(selectURL_ID, function (err, result, fields) {
-            if (err) throw err;
-            console.log("entire URL result", result);
-            console.log("result[0][\"URL_ID\"]", result[0]["URL_ID"]);
-            count['url_id'] = result[0]["URL_ID"];
+            con.query(selectURL_ID, function (err, selectURL_IDresult, fields) {
+                if (err) throw err;
+                //console.log("entire URL result", result);
+                //console.log("result[0][\"URL_ID\"]", result[0]["URL_ID"]);
+                //url_id = result[0]["URL_ID"];
+                //console.log('result from selecting URL_ID: ',selectURL_IDresult );
+                url_id = selectURL_IDresult[0]["URL_ID"];
+            });
         });
         for (let term in count) {
             if (!count.hasOwnProperty(term)) continue;
             let insertTerm = "INSERT INTO TERMS (TERM) VALUES (' " + term + " ')";
             let selectTerm_ID = "SELECT TERM_ID FROM TERMS WHERE TERM LIKE '%" + term + "%' ";
-            debugger;
+            //count[term]['url_id'] = url_id;
+            con.query(insertTerm, function (err, insertTermresult, fields) {
+                if (err) throw err;
+                //console.log("Inserted term", term);
+                //console.log("insert term result", result);
+                //console.log('result from inserting TERM: ',insertTermresult );
 
-            con.query(insertTerm, function (err, result, fields) {
-                if (err) throw err;
-                console.log("Inserted term", term);
-                console.log("insert term result", result);
-            });
-            con.query(selectTerm_ID, function (err, result, fields) {
-                if (err) throw err;
-                console.log("entire term result", result);
-                console.log("result[0][\"TERM_ID\"]", result[0]["TERM_ID"]);
-                count[term]["term_id"] = result[0]["TERM_ID"];
+                con.query(selectTerm_ID, function (err, selectTerm_IDresult, fields) {
+                    if (err) throw err;
+                    //console.log("entire term result", result);
+                    //console.log("result[0][\"TERM_ID\"]", result[0]["TERM_ID"]);                        //count[term]["term_id"] = result[0]["TERM_ID"];
+                    //console.log('result from selecting TERM_ID: ',selectTerm_IDresult );
+                    count[term]['url_id'] = url_id;
+                    console.log("count[term]['url_id'] is: ", count[term]['url_id']);
+                    count[term]["term_id"] = selectTerm_IDresult[0]["TERM_ID"];
+                    console.log("count[term]['term_id'] is: ", count[term]["term_id"]);
 
+                    let insertTermsURL = "INSERT INTO TERM_URL (URL_ID, term_ID, frequency) VALUES (" + count[term]['url_id'] + "," + count[term]["term_id"] + "," + count[term]["frequency"] + ")";
+                    con.query(insertTermsURL, function (err, result, fields) {
+                        if (err) throw err;
+                        //console.log("insert term url result", result);
+                        //console.log("Inserted row", count.url_id + "," + count[term]["TERM_ID"] + "," + count[term]["frequency"]);
+                    });
+                });
             });
-            console.log(count[term]);
-            console.log(count[url_id]);
-            let insertTermsURL = "INSERT INTO TERM_URL (URL_ID, term_ID, frequency) VALUES (" + count.url_id + "," + count[term]["TERM_ID"] + "," + count[term]["frequency"] + ")";
-            con.query(insertTermsURL, function (err, result, fields) {
-                if (err) throw err;
-                console.log("insert term url result", result);
-                console.log("Inserted row", count.url_id + "," + count[term]["TERM_ID"] + "," + count[term]["frequency"]);
-            });
-            debugger;
+
+//            console.log('current term is: ',term);
+//            console.log('term\'s info is: ',count[term]);
+//            console.log('url_id if saved, should be: ',count[term]['url_id']);
+//            console.log('term_id if saved, should be: ',count[term]['term_id']);
+
         }
     });
-
 }
 
 function visitPage(url, callback) {
