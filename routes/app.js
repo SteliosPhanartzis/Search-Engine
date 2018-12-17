@@ -55,7 +55,25 @@ function handleDisconnect() {
         }
     });
 }
-
+//Function to handle safe searches
+function safeSearch(input, callback) {
+    connection = mysql.createConnection(sqlconn);
+    connection.connect();
+    var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
+    var arrIn = input.split(searchRegEx);
+    var safeqry = "select * FROM PRITSUS WHERE PROFANITY = '" + input + "'";
+        // Callback to return result
+    var out = connection.query(safeqry, function (err, rows, fields) {
+        // Error handler
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        // Returns result
+        callback(err, rows);
+    });
+    connection.end();
+}
 // Function to query DB with user input and return results as callback
 function getURL(input, callback) {
     connection = mysql.createConnection(sqlconn);
@@ -68,7 +86,7 @@ function getURL(input, callback) {
     console.log(arrIn);
     // DB query
     for(var i = 0; i < arrIn.length; i++){
-        qry += "term like '%" + arrIn[i] +"%'"
+        qry += "term like '%" + arrIn[i] +"%'";
         if(i<(arrIn.length-1))
             qry+=' OR ';
         if(i>=(arrIn.length-1))
@@ -104,15 +122,25 @@ app.get('/', function (request, response) {
 app.get('/search', function (request, response) {
     var sql_res = '';
     sql_input = request.query.sid;
-    getURL(sql_input, function (err, urlList) {
+    //SafeSearch
+    safeSearch(sql_input, function (err, termList) {
+        // Maybe add error handler
+        // Check to make sure urlList is not null, then iterate
+        if (termList.length > 0)
+            response.render(path.join(__dirname, '../', 'views/search.html'), {results: "Assur!"});
+        else{
+    //Get Search
+        getURL(sql_input, function (err, urlList) {
         // Maybe add error handler
         // Check to make sure urlList is not null, then iterate
         if (urlList.length > 0 || (urlList.length != null))
             for (var i = 0; i < urlList.length; i++)
-                sql_res += '<div>' + urlList[i].URL + '</div>';
+                sql_res += '<div><a href = "' + urlList[i].URL + '">' + urlList[i].URL + '</a></div>';
         // Write function to loop through urlList to get urlList[i].URL_NAMES
         response.render(path.join(__dirname, '../', 'views/search.html'), {results: sql_res});
-    }, 1000);
+        }, 1000);
+        }
+    });
 });
 app.listen(PORT, () => {
     console.log("Running at Port " + PORT);
