@@ -5,7 +5,7 @@ const mysql = require('mysql');
 
 let START_URL = "https://en.wikipedia.org/wiki/Judaism";
 let SEARCH_WORD = "trump";
-let MAX_PAGES_TO_VISIT = 3;
+let MAX_PAGES_TO_VISIT = 100,000;
 
 let pagesVisited = {};
 let numPagesVisited = 0;
@@ -21,38 +21,40 @@ let con = mysql.createConnection({
     debug: 'true'
 });
 
+con.connect(function (err) {
+        if (err) throw err;
+        console.log("Connected!");
+});
 
 pagesToVisit.push(START_URL);
 crawl();
 
-function crawl() {
+function crawl(callback) {
     debugger;
     if (numPagesVisited >= MAX_PAGES_TO_VISIT) {
         console.log("Reached max limit of number of pages to visit.");
-        con.end();
         return;
     }
     let nextPage = pagesToVisit.pop();
 //    console.log(nextPage);
+    if (typeof(nextPage) === "undefined") {
+        console.log("That's it baby.");
+        return;
+    }
     if (nextPage in pagesVisited) {
         // We've already visited this page, so repeat the crawl
         crawl();
-    } else if (typeof(nextPage) === "undefined") {
-        console.log("That's it baby.");
-        return;
-    } else {
+    }else {
         // New page we haven't visited
         url = new URL(nextPage);
         baseUrl = url.protocol + "//" + url.hostname;
         visitPage(nextPage, crawl);
     }
+    return;
 }
 
 function insertIntoDB(count, url) {
     //console.log("SELECTING");
-    con.connect(function (err) {
-        if (err) throw err;
-        console.log("Connected!");
         let url_id;
         let insertURL = "INSERT INTO URLS (URL) VALUES (' " + url + "' )";
         let selectURL_ID = "SELECT URL_ID FROM URLS WHERE URL LIKE '%" + url+ "%' ";
@@ -106,7 +108,6 @@ function insertIntoDB(count, url) {
 //            console.log('term_id if saved, should be: ',count[term]['term_id']);
 
         }
-    });
 }
 
 function visitPage(url, callback) {
@@ -125,8 +126,10 @@ function visitPage(url, callback) {
         // Parse the document body
         let $ = cheerio.load(body);
         let count = searchForWord($, SEARCH_WORD);
-        collectInternalLinks($);
+        debugger;
         insertIntoDB(count, url);
+        collectInternalLinks($);
+        callback();
     });
 
     // con.query(sqlTerms, function(err, result) {
@@ -155,7 +158,7 @@ function visitPage(url, callback) {
 //     }
     //collectInternalLinks($);
     // In this short program, our callback is just calling crawl()
-    callback();
+    
 
 }
 
