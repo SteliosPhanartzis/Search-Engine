@@ -18,19 +18,21 @@
         data-target="#exampleModalCenter">Login
 </button>
 <!--Logo-->
-<div>
-    <div id="logo" class="">
-			<span class="logoText">
-				Ask
-			</span>
-    </div>
-    <span class="logoText blackText">
-			Lawrence
-		</span>
+<div style="cursor: pointer;">
+    <a href="/">
+        <div id="logo" class="">
+          <span class="logoText">
+            Ask
+          </span>
+        </div>
+        <span class="logoText blackText">
+          Lawrence
+      </span>
+    </a>
 </div>
 
 <style>
-nav {
+.views {
   margin: 30px;
   border: 1px solid red;
   float: left;
@@ -40,19 +42,18 @@ nav {
 }
 
 /* Style the list inside the menu */
-nav ul {
+.views ul{
   list-style-type: none;
   padding: 0;
 }
 
+.views ul li{
+margin: 5%;
+}
+
 article {
-  margin: 30px;
-  border: 1px solid red;
-  float: left;
-  padding: 20px;
   width: 70%;
-  background-color: #f1f1f1;
-  height: 300px; /* only for demonstration, should be removed */
+  height: auto;
 }
 
 /* Clear floats after the columns */
@@ -64,14 +65,17 @@ section:after {
 </style>
 
 <section>
-  <nav>
+  <form class="views">
     <ul>
-      <li> <a href="#">History</a>
-      <li> <a href="#">Terms_URL</a>
+      <li><input type="submit" class="btn" value="History" name="History"></li>
+      <li><input type="submit" class="btn" value="URLS" name="URLS"></li>
+      <li><input type="submit" class="btn" value="Term_URL" name="Term_URL"></li>
+      <li><input type="submit" class="btn" value="Terms" name="Terms"></li>
     </ul>
-  </nav>
+  </form>
 
-  <article>
+  <article class="views">
+    <%- data %>
   </article>
 
 </section>
@@ -87,20 +91,18 @@ section:after {
                 <!-- <span aria-hidden="true">&times;</span> -->
                 <!-- </button> -->
             </div>
-            <div class="modal-body">
-                <form>
+                <form method="post" action='/a'>
                     <label for="user" class="d-inline-block">Username:</label>
                     <input type="text" class="w-75 mt-auto mb-auto ml-auto mr-auto" class="d-inline-flex" name="user"
                            id="user" placeholder="Username"/>
                     <label for="pass" class="d-inline-block">Password:</label>
                     <input type="password" class="w-75 ml-auto mr-auto mt-4 mb-auto" class="d-inline-flex" name="pass"
                            id="pass" placeholder="Password"/>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Login</button>
-            </div>
         </div>
     </div>
 </div>

@@ -5,7 +5,7 @@ const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const PORT = process.env.PORT || 5090;
+const PORT = process.env.PORT || 5300;
 var sql_input;
 var connection;
 
@@ -113,11 +113,25 @@ app.all('/*', function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type,accept,access_token,X-Requested-With');
     next();
 });
-
+function getAdmin(input,callback) {
+    connection = mysql.createConnection(sqlconn);
+    connection.connect();
+    var out = connection.query(input, function (err, rows, fields) {
+        // Error handler
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        // Returns result
+        callback(err, rows);
+    });
+    connection.end();
+}
 //Default path call serves index.html
 app.get('/', function (request, response) {
     response.sendFile(path.join(__dirname, '../', '/views/index.html'));
 });
+
 //Path call when user has submitted a search
 app.get('/search', function (request, response) {
     var sql_res = '';
@@ -126,7 +140,7 @@ app.get('/search', function (request, response) {
     safeSearch(sql_input, function (err, termList) {
         // Maybe add error handler
         // Check to make sure urlList is not null, then iterate
-        if (termList.length > 0)
+        if (termList.length > 0 && sql_input != /[\s]*/)
             response.render(path.join(__dirname, '../', 'views/search.html'), {results: "Assur!"});
         else{
     //Get Search
@@ -141,6 +155,55 @@ app.get('/search', function (request, response) {
         }, 1000);
         }
     });
+});
+
+app.post('/a',function(req,res){
+    res.render(path.join(__dirname, '../', '/views/admin.html'),{data:''});
+});
+app.get('/a',function(req,res){
+    var getHistory = req.query.History;
+    var getTermsURL  = req.query.Term_URL;
+    var getTerms = req.query.Terms;
+    var getURLS = req.query.URLS;
+    var outArr;
+    var qry;
+    console.log(req.query);
+    if(getTermsURL == 'Term_URL'){
+        qry = "SELECT * FROM TERM_URL";
+        getAdmin(qry,function (err, result){
+            for(var i =0; i < result.length; i++){
+                outArr += "<div>" + result[i].URL_ID + " | " + result[i].term_ID + " | " + result[i].frequency + "</div>";
+            }
+            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+        },1000);
+    }
+    else if(getHistory == 'History'){
+        qry = "SELECT * FROM HISTORY";
+        getAdmin(qry,function (err, result){
+            for(var i =0; i < result.length; i++){
+                outArr += "<div>" + result[i].SEARCH_ID  + " | " + result[i].start_time  + " | " + result[i].end_time + "</div>";
+            }
+            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+        },1000);
+    }
+    else if(getTerms == 'Terms'){
+        qry = "SELECT * FROM TERMS";
+        getAdmin(qry,function (err, result){
+            for(var i =0; i < result.length; i++){
+                outArr += "<div>" + result[i].term_ID + " | " + result[i].term + "</div>";
+            }
+            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+        },1000);
+    }
+    else if(getURLS == 'URLS'){
+        qry = "SELECT * FROM URLS";
+        getAdmin(qry,function (err, result){
+            for(var i =0; i < result.length; i++){
+                outArr += "<div>" + result[i].URL_ID + " | " + result[i].URL + "</div>";
+            }
+            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+        },1000);
+    }
 });
 app.listen(PORT, () => {
     console.log("Running at Port " + PORT);
