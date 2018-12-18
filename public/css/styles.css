@@ -1,3 +1,36 @@
+/*Admin Page*/
+.views {
+  margin: 30px;
+  border: 1px solid black;
+  float: left;
+  padding: 20px;
+  height: 300px;
+}
+
+/* Style the list inside the menu */
+.views ul{
+  list-style-type: none;
+  padding: 0;
+}
+
+.views ul li{
+margin: 5%;
+}
+.tableWrapper{
+display: block;
+max-height: 82vh;
+overflow-y: auto;
+}
+.adminTable tr td{
+  border: 1px solid black;
+}
+/* Clear floats after the columns */
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 #search {
     padding-top: 20vh;
     width: 30%;
@@ -8,7 +41,6 @@
     padding-top: 5%;
     background-image: linear-gradient(0deg, #81b4f5 2px, rgba(0, 40, 136, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0) !important;
 }
-
 button:hover {
     background-color: rgba(30, 30, 30, .9) !important;
     color: #fff !important;

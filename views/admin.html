@@ -14,9 +14,6 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css"/>
 </HEAD>
 <BODY>
-<button type="button" class="btn btn-raised btn-outline-dark" id="login" data-toggle="modal"
-        data-target="#exampleModalCenter">Login
-</button>
 <!--Logo-->
 <div style="cursor: pointer;">
     <a href="/">
@@ -31,39 +28,6 @@
     </a>
 </div>
 
-<style>
-.views {
-  margin: 30px;
-  border: 1px solid red;
-  float: left;
-  background: #f1f1f1;
-  padding: 20px;
-  height: 300px;
-}
-
-/* Style the list inside the menu */
-.views ul{
-  list-style-type: none;
-  padding: 0;
-}
-
-.views ul li{
-margin: 5%;
-}
-
-article {
-  width: 70%;
-  height: auto;
-}
-
-/* Clear floats after the columns */
-section:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>
-
 <section>
   <form class="views">
     <ul>
@@ -74,38 +38,14 @@ section:after {
     </ul>
   </form>
 
-  <article class="views">
-    <%- data %>
-  </article>
+  <div class="tableWrapper">
+    <table class="adminTable table table-striped">
+      <%- data %>
+    </table>
+  </div>
 
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
-                <!-- <span aria-hidden="true">&times;</span> -->
-                <!-- </button> -->
-            </div>
-                <form method="post" action='/a'>
-                    <label for="user" class="d-inline-block">Username:</label>
-                    <input type="text" class="w-75 mt-auto mb-auto ml-auto mr-auto" class="d-inline-flex" name="user"
-                           id="user" placeholder="Username"/>
-                    <label for="pass" class="d-inline-block">Password:</label>
-                    <input type="password" class="w-75 ml-auto mr-auto mt-4 mb-auto" class="d-inline-flex" name="pass"
-                           id="pass" placeholder="Password"/>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-                </form>
-        </div>
-    </div>
-</div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

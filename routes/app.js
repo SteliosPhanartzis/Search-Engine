@@ -165,41 +165,45 @@ app.get('/a',function(req,res){
     var getTermsURL  = req.query.Term_URL;
     var getTerms = req.query.Terms;
     var getURLS = req.query.URLS;
-    var outArr;
+    var outArr = '';
     var qry;
     console.log(req.query);
     if(getTermsURL == 'Term_URL'){
         qry = "SELECT * FROM TERM_URL";
+        outArr += '<tr><td>URL_ID</td>' + '<td>term_ID</td>' + '<td>frequency</td></tr>';
         getAdmin(qry,function (err, result){
             for(var i =0; i < result.length; i++){
-                outArr += "<div>" + result[i].URL_ID + " | " + result[i].term_ID + " | " + result[i].frequency + "</div>";
+                outArr += "<tr><td>" + result[i].URL_ID + "</td><td>" + result[i].term_ID + "</td><td>" + result[i].frequency + "</td></tr>";
             }
             res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
         },1000);
     }
     else if(getHistory == 'History'){
         qry = "SELECT * FROM HISTORY";
+        outArr += '<tr><td>SEARCH_ID</td>' + '<td>start_time</td>' + '<td>end_time</td></tr>';
         getAdmin(qry,function (err, result){
             for(var i =0; i < result.length; i++){
-                outArr += "<div>" + result[i].SEARCH_ID  + " | " + result[i].start_time  + " | " + result[i].end_time + "</div>";
+                outArr += "<tr><td>" + result[i].SEARCH_ID  + "</td><td>" + result[i].start_time  + "</td><td>" + result[i].end_time + "</td></tr>";
             }
             res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
         },1000);
     }
     else if(getTerms == 'Terms'){
         qry = "SELECT * FROM TERMS";
+        outArr += '<tr><td>term_ID</td>' + '<td>term</td></tr>';
         getAdmin(qry,function (err, result){
             for(var i =0; i < result.length; i++){
-                outArr += "<div>" + result[i].term_ID + " | " + result[i].term + "</div>";
+                outArr += "<tr><td>" + result[i].term_ID + "</td><td>" + result[i].term + "</td></tr>";
             }
             res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
         },1000);
     }
     else if(getURLS == 'URLS'){
         qry = "SELECT * FROM URLS";
+        outArr += '<tr><td>URL_ID</td>' + '<td>URL</td></tr>';
         getAdmin(qry,function (err, result){
             for(var i =0; i < result.length; i++){
-                outArr += "<div>" + result[i].URL_ID + " | " + result[i].URL + "</div>";
+                outArr += "<tr><td>" + result[i].URL_ID + "</td><td>" + result[i].URL + "</td></tr>";
             }
             res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
         },1000);
