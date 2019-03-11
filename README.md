@@ -1,4 +1,4 @@
-# AskLawrence Search Screen and Engine
+# AskLawrence Search Screen & Engine
 
 We are live at [Ask Lawrence](https://ask-lawrence.herokuapp.com)!
 
@@ -24,7 +24,7 @@ This search engine also has a "safe search" which filters out queries containing
 ## Team Members
 
 * Mark Abramov (@markab4) - Frontend, Web Crawler, Safe Search
-* Maxwell Grossman (@maxperryg) - Web Crawler, Indexing
+* Maxwell Grossman (@maxperryg) - Web Crawler, Database Indexing
 * Maxwell Richter (@maxwellrichter) - Frontend
-* Stelios Phanartzis (@SteliosPhanartzis) - Backend
-* Jose Delaguarda (@josedlg) - Database
+* Stelios Phanartzis (@SteliosPhanartzis) - Backend Design, Client-Side & Server-Side Functionality
+* Jose Delaguarda (@josedlg) - Database Design
