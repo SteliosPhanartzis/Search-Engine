@@ -26,7 +26,9 @@ app.set('view engine', 'ejs');
 //     debug: 'false'
 // };
 
-const sqlconn = process.env.JAWSDB_URL;
+const sqlconn = {
+	url: process.env.JAWSDB_URL
+};
 
 // if (process.env.NODE_ENV === 'production') {
 // 	app.use(express.static('client/build'));
