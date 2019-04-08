@@ -27,7 +27,7 @@ app.set('view engine', 'ejs');
 // };
 
 const sqlconn = {
-	url: process.env.JAWSDB_URL
+	host: process.env.JAWSDB_URL
 };
 
 // if (process.env.NODE_ENV === 'production') {
