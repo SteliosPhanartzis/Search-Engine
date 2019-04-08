@@ -18,13 +18,15 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
 // Connection credentials to mysql db. Probably not safe to just publicly upload to github.
-const sqlconn = {
-    host: 'h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-    user: 'ssam7xjm54kms0e0',
-    password: 'tr9diqtobus8nu5y',
-    database: 'hei5xkowlg9oo6t4',
-    debug: 'false'
-};
+// const sqlconn = {
+//     host: 'h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+//     user: 'ssam7xjm54kms0e0',
+//     password: 'tr9diqtobus8nu5y',
+//     database: 'hei5xkowlg9oo6t4',
+//     debug: 'false'
+// };
+
+const sqlconn = process.env.JAWSDB_URL;
 
 // if (process.env.NODE_ENV === 'production') {
 // 	app.use(express.static('client/build'));
