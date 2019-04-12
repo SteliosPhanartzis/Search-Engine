@@ -17,15 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
-// Connection credentials to mysql db. Probably not safe to just publicly upload to github.
-// const sqlconn = {
-//     host: 'h2cwrn74535xdazj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-//     user: 'ssam7xjm54kms0e0',
-//     password: 'tr9diqtobus8nu5y',
-//     database: 'hei5xkowlg9oo6t4',
-//     debug: 'false'
-// };
-
+// Connection credentials to mysql db.
 const sqlconn = {
 	host: process.env.JAWSDB_HOST,
 	user: process.env.JAWSDB_USER,
@@ -38,6 +30,20 @@ const sqlconn = {
 // 	app.use(express.static('client/build'));
 // }
 
+// Function to sanitize input
+function sanitizer(input) {
+	var reg = /[&<>"'/\\]/ig;
+	var map = {
+		'<': '&lt;',
+		'>': '&gt;',
+		'&': '&amp;',
+		'"':'&quot;',
+		"'": '&#x27;',
+		"/": '&#x2F;',
+		"\\": '&#x5C;'
+	};
+	return input.replace(reg, (char)=>(map[char]));
+}
 // Function to handle disconnects from mySql DB
 function handleDisconnect() {
     console.log('1. connecting to db:');
@@ -68,9 +74,10 @@ function safeSearch(input, callback) {
     connection = mysql.createConnection(sqlconn);
     connection.connect();
     var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
-    var arrIn = input.split(searchRegEx);
+    //Sanitize the input
+    input = sanitizer(input);
     var safeqry = "select * FROM PRITSUS WHERE PROFANITY = '" + input + "'";
-        // Callback to return result
+    // Callback to return result
     var out = connection.query(safeqry, function (err, rows, fields) {
         // Error handler
         if (err) {
@@ -87,6 +94,8 @@ function getURL(input, callback) {
     connection = mysql.createConnection(sqlconn);
     connection.connect();
     var searchRegEx = /[\s\(\)-\+\:\;\'\"\.\?\!]/;
+    //Sanitize the input
+    input = sanitizer(input);
     var arrIn = input.split(searchRegEx);
     var qry = "select URL from URLS where URL_ID in" +
               "(select URL_ID from TERM_URL where term_ID in" +
