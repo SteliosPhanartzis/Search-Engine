@@ -5,7 +5,8 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bapp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node routes/app.js"
+    "start": "node routes/app.js",
+    "devStart": "nodemon routes/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,14 +19,22 @@
   },
   "homepage": "https://github.com/SteliosPhanartzis/Search-Engine#readme",
   "dependencies": {
-    "bootstrap-material-design": "^4.1.1",
-    "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "bcrypt": "^3.0.6",
+    "bootstrap-material-design": "^4.1.2",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.16.2",
     "fs": "0.0.1-security",
     "jquery": "^3.4.1",
-    "mysql": "^2.16.0",
-    "nodemon": "^1.18.7",
-    "popper.js": "^1.14.6",
+    "mysql": "^2.17.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "popper.js": "^1.15.0",
     "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.1.0",
+    "nodemon": "^1.19.2"
   }
 }

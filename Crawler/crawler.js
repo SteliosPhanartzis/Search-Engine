@@ -3,9 +3,9 @@ const cheerio = require('cheerio');
 const URL = require('url-parse');
 const mysql = require('mysql');
 
-let START_URL = "https://en.wikipedia.org/wiki/Judaism";
-let SEARCH_WORD = "trump";
-let MAX_PAGES_TO_VISIT = 100,000;
+let START_URL = "https://www.samsung.com/";
+let SEARCH_WORD = "our";
+let MAX_PAGES_TO_VISIT = 4;
 
 let pagesVisited = {};
 let numPagesVisited = 0;

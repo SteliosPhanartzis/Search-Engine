@@ -1,34 +1,55 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
 // Packages and variables
 const express = require('express');
-const app = new express();
+const app = express();
 const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
+const initializePassport = require('./passport-config')
 const PORT = process.env.PORT || 5300;
 var sql_input;
 var connection;
+
+//Set up authentication for admin access
+initializePassport(
+    passport, 
+    name => users.find(user => user.name === name),
+    id => users.find(user => user.id === id)
+)
+
+const users = [{id: '1567823659832',
+                name: 'admin',
+                password: 'password'
+              }]
 
 // Set up paths and stuff for express
 app.use(express.static('public'));
 app.set('views', path.join(__dirname, '../', 'views'));
 app.use(favicon(path.join(__dirname, '../public/', 'favicon.ico')))
 app.use(bodyParser.urlencoded({extended: true}));
-app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
-// Connection credentials to mysql db.
+// Connection credentials to mysql db
 const sqlconn = {
-	host: process.env.JAWSDB_HOST,
-	user: process.env.JAWSDB_USER,
-    password: process.env.JAWSDB_PASS,
-    database: process.env.JAWSDB_DB,
+    url: process.env.JAWSDB_URL,
 	debug: 'false'
 };
-
-// if (process.env.NODE_ENV === 'production') {
-// 	app.use(express.static('client/build'));
-// }
 
 // Function to sanitize input
 function sanitizer(input) {
@@ -82,7 +103,7 @@ function safeSearch(input, callback) {
         // Error handler
         if (err) {
             console.log(err);
-            throw err;
+            // throw err;
         }
         // Returns result
         callback(err, rows);
@@ -144,9 +165,9 @@ function getAdmin(input,callback) {
     });
     connection.end();
 }
-//Default path call serves index.html
+//Default path call serves index.ejs
 app.get('/', function (request, response) {
-    response.sendFile(path.join(__dirname, '../', '/views/index.html'));
+    response.render(path.join(__dirname, '../', '/views/index.ejs'));
 });
 
 //Path call when user has submitted a search
@@ -158,7 +179,7 @@ app.get('/search', function (request, response) {
         // Maybe add error handler
         // Check to make sure urlList is not null, then iterate
         if (termList.length > 0 && sql_input != /[\s]*/)
-            response.render(path.join(__dirname, '../', 'views/search.html'), {results: "Assur!"});
+            response.render(path.join(__dirname, '../', 'views/search.ejs'), {results: "Assur!"});
         else{
     //Get Search
         getURL(sql_input, function (err, urlList) {
@@ -168,14 +189,14 @@ app.get('/search', function (request, response) {
             for (var i = 0; i < urlList.length; i++)
                 sql_res += '<div><a href = "' + urlList[i].URL + '">' + urlList[i].URL + '</a></div>';
         // Write function to loop through urlList to get urlList[i].URL_NAMES
-        response.render(path.join(__dirname, '../', 'views/search.html'), {results: sql_res});
+        response.render(path.join(__dirname, '../', 'views/search.ejs'), {results: sql_res});
         }, 1000);
         }
     });
 });
 
 app.post('/a',function(req,res){
-    res.render(path.join(__dirname, '../', '/views/admin.html'),{data:''});
+    res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:''});
 });
 app.get('/a',function(req,res){
     var getHistory = req.query.History;
@@ -192,7 +213,7 @@ app.get('/a',function(req,res){
             for(var i =0; i < result.length; i++){
                 outArr += "<tr><td>" + result[i].URL_ID + "</td><td>" + result[i].term_ID + "</td><td>" + result[i].frequency + "</td></tr>";
             }
-            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+            res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:outArr});
         },1000);
     }
     else if(getHistory == 'History'){
@@ -202,7 +223,7 @@ app.get('/a',function(req,res){
             for(var i =0; i < result.length; i++){
                 outArr += "<tr><td>" + result[i].SEARCH_ID  + "</td><td>" + result[i].start_time  + "</td><td>" + result[i].end_time + "</td></tr>";
             }
-            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+            res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:outArr});
         },1000);
     }
     else if(getTerms == 'Terms'){
@@ -212,7 +233,7 @@ app.get('/a',function(req,res){
             for(var i =0; i < result.length; i++){
                 outArr += "<tr><td>" + result[i].term_ID + "</td><td>" + result[i].term + "</td></tr>";
             }
-            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+            res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:outArr});
         },1000);
     }
     else if(getURLS == 'URLS'){
@@ -222,10 +243,25 @@ app.get('/a',function(req,res){
             for(var i =0; i < result.length; i++){
                 outArr += "<tr><td>" + result[i].URL_ID + "</td><td>" + result[i].URL + "</td></tr>";
             }
-            res.render(path.join(__dirname, '../', '/views/admin.html'),{data:outArr});
+            res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:outArr});
         },1000);
     }
 });
+
+function checkAuthenticated(req, res, next){
+    if (req.isAuthenticated())
+        return next()
+    else 
+        res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next){
+    if (req.isAuthenticated())
+        return res.redirect('/')
+    else 
+        next()
+}
+
 app.listen(PORT, () => {
     console.log("Running at Port " + PORT);
 });
