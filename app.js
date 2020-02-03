@@ -5,7 +5,7 @@ const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const srvEnv = require('dotenv/config')
+// const srvEnv = require('dotenv/config')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
@@ -32,12 +32,12 @@ app.set('views', path.join(__dirname, './views/'));
 app.use(favicon(path.join(__dirname, './public/', 'favicon.ico')))
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
-app.use(flash())
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
+// app.use(flash())
+// app.use(session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false
+// }))
 app.use(passport.initialize())
 app.use(passport.session())
 
