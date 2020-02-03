@@ -5,8 +5,8 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bapp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node routes/app.js",
-    "devStart": "nodemon routes/app.js"
+    "start": "node app.js",
+    "devStart": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "nodemon": "^1.19.2"
   }
 }
