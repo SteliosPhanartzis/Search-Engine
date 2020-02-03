@@ -5,8 +5,8 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bapp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "devStart": "nodemon app.js"
+    "start": "node ./app.js",
+    "devStart": "nodemon ./app.js"
   },
   "repository": {
     "type": "git",
