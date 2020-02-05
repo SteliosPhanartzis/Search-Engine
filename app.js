@@ -51,10 +51,9 @@ app.all('/*', function (req, res, next) {
     next();
 });
 
-//Default path call serves index.ejs
-app.get('/', function (request, response) {
-    response.render(path.join(__dirname, './', '/views/index.ejs'));
-});
+//Default route
+const indexRouter = require('./routes/index')
+app.use('/', indexRouter)
 //Search route
 const searchRouter = require('./routes/search')
 app.use('/search', searchRouter)
