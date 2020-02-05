@@ -2,8 +2,9 @@
 const express = require('express')
 const router = express.Router()
 const mysql = require('mysql');
-const srvEnv = require('dotenv/config')
 const path = require("path");
+if (process.env.NODE_ENV !== 'production') 
+    require('dotenv').config()
 
 //Logging in to admin account
 router.post('/',function(req,res){

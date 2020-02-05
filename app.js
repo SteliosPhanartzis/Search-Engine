@@ -5,7 +5,6 @@ const favicon = require('serve-favicon')
 const path = require("path");
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-// const srvEnv = require('dotenv/config')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
@@ -13,6 +12,9 @@ const session = require('express-session');
 const initializePassport = require('./passport-config')
 const PORT = process.env.PORT || 5300;
 var connection;
+
+if (process.env.NODE_ENV !== 'production') 
+    require('dotenv').config()
 
 //Set up authentication for admin access
 initializePassport(

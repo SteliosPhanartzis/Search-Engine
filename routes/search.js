@@ -2,8 +2,10 @@
 const express = require('express')
 const router = express.Router()
 const mysql = require('mysql');
-const srvEnv = require('dotenv/config')
 const path = require("path");
+if (process.env.NODE_ENV !== 'production') 
+    require('dotenv').config()
+
 // Connection credentials to mysql db
 const sqlconn = process.env.JAWSDB_URL;
 
