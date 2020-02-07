@@ -32,13 +32,17 @@ section:after {
 }
 
 #search {
-    padding-top: 20vh;
+    position: absolute;
+    top: 0;
     width: 30%;
-    margin: 0 1%;
+    left: 35vw;
+    margin: 1% auto;
 }
-
+.emptySearch {
+    top: +30vh !important;
+}
 #searchBar {
-    padding-top: 5%;
+    padding-top: 0;
     background-image: linear-gradient(0deg, #81b4f5 2px, rgba(0, 40, 136, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0) !important;
 }
 button:hover {

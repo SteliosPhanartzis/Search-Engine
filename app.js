@@ -13,8 +13,8 @@ const initializePassport = require('./passport-config')
 const PORT = process.env.PORT || 5300;
 var connection;
 
-if (process.env.NODE_ENV !== 'production') 
-    require('dotenv').config()
+// if (process.env.NODE_ENV !== 'production') 
+    const dtsrv = require('dotenv/config')
 
 //Set up authentication for admin access
 initializePassport(
@@ -56,9 +56,6 @@ app.all('/*', function (req, res, next) {
 //Default route
 const indexRouter = require('./routes/index')
 app.use('/', indexRouter)
-//Search route
-const searchRouter = require('./routes/search')
-app.use('/search', searchRouter)
 //Admin route
 const adminRouter = require('./routes/admin')
 app.use('/admin', adminRouter)
