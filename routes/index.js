@@ -28,7 +28,7 @@ router.get('/', function (request, response) {
                 // Check to make sure urlList is not null, then iterate
                 if (urlList.length > 0 || (urlList.length != null))
                     for (var i = 0; i < urlList.length; i++)
-                        sql_res += '<div><a href = "' + urlList[i].URL + '">' + urlList[i].URL + '</a></div>';
+                        sql_res += '<a href = "' + urlList[i].URL + '"><div class="resultItem">' + urlList[i].URL + '</div></a>';
                 // Write function to loop through urlList to get urlList[i].URL_NAMES
                 response.render(path.join(__dirname, '../', 'views/index.ejs'), {results: sql_res});
             }, 1000);

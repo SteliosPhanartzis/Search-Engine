@@ -8,6 +8,9 @@
 }
 
 /* Style the list inside the menu */
+a {
+    text-decoration: none !important;
+}
 .views ul{
   list-style-type: none;
   padding: 0;
@@ -30,7 +33,17 @@ section:after {
   display: table;
   clear: both;
 }
-
+.resultItem {
+  border: 1px solid lightgray;
+  box-shadow: 1px 1px gray;
+  border-radius: 2px;
+  padding: 1vh;
+  margin: 1vh 10vw;
+}
+.resultItem:hover {
+  border: 1px solid teal;
+  box-shadow: 1px 1px teal;
+}
 #search {
     position: absolute;
     top: 0;
