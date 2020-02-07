@@ -11,6 +11,12 @@
 a {
     text-decoration: none !important;
 }
+.repo {
+  position: fixed;
+  height: 2vw;
+  top: 94vh;
+  left: 96vw;
+}
 .views ul{
   list-style-type: none;
   padding: 0;
