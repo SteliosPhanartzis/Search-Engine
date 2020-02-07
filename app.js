@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5300;
 var connection;
 
 // if (process.env.NODE_ENV !== 'production') 
-    const dtsrv = require('dotenv/config')
+//     const dtsrv = require('dotenv/config')
 
 //Set up authentication for admin access
 initializePassport(
