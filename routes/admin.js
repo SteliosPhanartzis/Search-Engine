@@ -6,6 +6,8 @@ const path = require("path");
 if (process.env.NODE_ENV !== 'production') 
     require('dotenv').config()
 
+const sqlconn = process.env.JAWSDB_URL;
+
 //Logging in to admin account
 router.post('/',function(req,res){
     res.render(path.join(__dirname, '../', '/views/admin.ejs'),{data:''});
