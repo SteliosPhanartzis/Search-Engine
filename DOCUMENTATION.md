@@ -1,29 +1,37 @@
-# Search Engine
+# Documentation
 
-## Preface
+### Table of Contents
+ * [Search Engine](#Search-Engine) 
+ * [Crawler](#Crawler)
+ * [API](#API)
+ * [Database](#Database)
+
+## Search-Engine
+
+#### Preface
 A .env file containing the connection string is needed to access the database. 
 The contents of the file should contain `JAWSDB_URL=` followed by the connection string to the MySQL database you are using.
 The connection string should look something like `mysql://[user]:[password]@[hostname]:[port]/[default schema]`
 For access to the database hosted by heroku, contact @SteliosPhanartzis.
 
-## Deploying the Application Locally
+#### Deploying the Application Locally
 * Clone the repository ontro your local environment
 * Run `npm install` to install all dependencies
 * From your terminal, cd to the cloned repository
 * To ensure the application the application is opened in a development environment, type `npm run dev` and hit enter. 
 
-# Crawler
+## Crawler
 To be completed
 
-# API
+## API
 To be completed
 
-# Database
+## Database
 This application utilizes MySQL as part of it's stack, the code given below to generate the necessary tables will be specifically for MySQL.
 
 Please adhere to the given naming conventions to ensure the app functions properly.
 
-## ADMIN
+#### ADMIN
 Contains login information for administor view access.
 
 ```
@@ -51,7 +59,7 @@ CREATE TABLE `ADMIN` (
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 ```
 
-## PRITSUS
+#### PRITSUS
 Contains a list of forbidden terms for the safe search functionality.
 
 ```
@@ -78,7 +86,7 @@ CREATE TABLE `PRITSUS` (
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 ```
 
-## TERM_URL
+#### TERM_URL
 Contains url ID, term ID, and number of times the term was associated with the url. Used to prioritze urls that have higher frequencies of relevant terms.
 
 ```
@@ -109,7 +117,7 @@ CREATE TABLE `TERM_URL` (
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 ```
 
-## TERMS
+#### TERMS
 Contains a list of terms pulled from indexed urls.
 
 ```
@@ -136,7 +144,7 @@ CREATE TABLE `TERMS` (
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 ```
 
-## URLS
+#### URLS
 Contains a list of urls that were indexed.
 ```
 CREATE DATABASE  IF NOT EXISTS `hei5xkowlg9oo6t4` /*!40100 DEFAULT CHARACTER SET utf8 */;
