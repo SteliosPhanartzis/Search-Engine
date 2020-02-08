@@ -85,6 +85,32 @@ CREATE TABLE `PRITSUS` (
 
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 ```
+#### HISTORY
+```
+CREATE DATABASE  IF NOT EXISTS `hei5xkowlg9oo6t4` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `hei5xkowlg9oo6t4`;
+
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+
+-- GTID state at the beginning of the backup 
+
+SET @@GLOBAL.GTID_PURGED='';
+
+-- Table structure for table `HISTORY`
+
+DROP TABLE IF EXISTS `HISTORY`;
+
+CREATE TABLE `HISTORY` (
+  `SEARCH_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `DURATION` time NOT NULL,
+  PRIMARY KEY (`SEARCH_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
+```
 
 #### TERM_URL
 Contains url ID, term ID, and number of times the term was associated with the url. Used to prioritze urls that have higher frequencies of relevant terms.
