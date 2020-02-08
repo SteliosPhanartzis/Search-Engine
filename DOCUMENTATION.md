@@ -32,7 +32,7 @@ This application utilizes MySQL as part of it's stack, the code given below to g
 Please adhere to the given naming conventions to ensure the app functions properly.
 
 #### ADMIN
-Contains login information for administor view access.
+Contains login information for administrator view access.
 
 ```
 CREATE DATABASE  IF NOT EXISTS `hei5xkowlg9oo6t4` /*!40100 DEFAULT CHARACTER SET utf8 */;
