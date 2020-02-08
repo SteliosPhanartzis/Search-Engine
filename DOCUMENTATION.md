@@ -27,7 +27,7 @@ To be completed
 To be completed
 
 ## Database
-This application utilizes MySQL as part of it's stack, the code given below to generate the necessary tables will be specifically for MySQL.
+This application utilizes MySQL as part of its stack, the code given below to generate the necessary tables will be specifically for MySQL.
 
 Please adhere to the given naming conventions to ensure the app functions properly.
 
