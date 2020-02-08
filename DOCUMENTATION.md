@@ -15,7 +15,7 @@ The connection string should look something like `mysql://[user]:[password]@[hos
 For access to the database hosted by heroku, contact @SteliosPhanartzis.
 
 #### Deploying the Application Locally
-* Clone the repository ontro your local environment
+* Clone the repository onto your local environment
 * Run `npm install` to install all dependencies
 * From your terminal, cd to the cloned repository
 * To ensure the application the application is opened in a development environment, type `npm run dev` and hit enter. 
