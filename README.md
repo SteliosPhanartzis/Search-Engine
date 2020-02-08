@@ -21,6 +21,9 @@ counts
 
 This search engine also has a "safe search" which filters out queries containing profane language.
 
+## Documentation/Local Deployment Instructions
+Instructions to run the application locally can be found in our [documentation](DOCUMENTATION.md) file.
+
 ## Team Members
 
 * Mark Abramov (@markab4) - Frontend, Web Crawler, Safe Search
