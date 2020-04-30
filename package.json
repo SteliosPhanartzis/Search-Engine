@@ -26,7 +26,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.17.0",
     "fs": "0.0.1-security",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
